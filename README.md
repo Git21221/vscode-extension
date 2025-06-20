@@ -6,7 +6,7 @@ A premium VSCode extension that automatically adds and maintains line numbers an
 
 ### 🎯 Automatic Line Tracking
 - Automatically adds file name and line number to your output statements
-- Example: `console.log("hello")` becomes `console.log("hello test.js:89")`
+- Example: `console.log("hello")` becomes `console.log("hello - test.js:89")`
 - Supports JavaScript, TypeScript, Python, Java, C#, PHP, Go, and Rust
 
 ### 🔄 Auto-Update
@@ -30,14 +30,14 @@ A premium VSCode extension that automatically adds and maintains line numbers an
 
 ## Commands
 
-- **Add Line Tracking**: `Ctrl+Shift+t` (Cmd+Alt+t on Mac)
-- **Update All Tracking**: `Ctrl+Shift+u` (Cmd+Alt+u on Mac)
+- **Add Line Tracking**: `Ctrl+Alt+t` (Cmd+Alt+t on Mac)
+- **Update All Tracking**: `Ctrl+Alt+u` (Cmd+Alt+u on Mac)
 - **Remove Line Tracking**: Available in context menu
 - **Toggle Auto-Update**: Available in command palette
 
 ## Installation
 
-1. Install from VSCode Marketplace
+1. Install from VSCode Marketplace [Smart Output Tracker Pro](https://marketplace.visualstudio.com/items?itemName=SaikatDas.output-formatter)
 2. Restart VSCode
 3. Open any supported file and start using the extension
 
@@ -79,14 +79,14 @@ console.error("Connection failed");
 
 ### After
 ```javascript
-console.log("User logged in auth.js:45");
-console.error("Connection failed database.js:12");
+console.log("User logged in - auth.js:45");
+console.error("Connection failed - database.js:12");
 ```
 
 ### Python Example
 ```python
-print("Processing data data_processor.py:78")
-logging.info("Task completed task_manager.py:156")
+print("Processing data -  data_processor.py:78")
+logging.info("Task completed - task_manager.py:156")
 ```
 
 ## Premium Features

@@ -106,7 +106,8 @@ export function activate(context: vscode.ExtensionContext) {
     addTrackingCommand,
     updateAllTrackingCommand,
     removeTrackingCommand,
-    toggleAutoUpdateCommand
+    toggleAutoUpdateCommand,
+    vscode.workspace.onDidRenameFiles(handleFileRename)
   );
 
   function setupAutoUpdate() {
@@ -277,7 +278,6 @@ export function activate(context: vscode.ExtensionContext) {
     // Find the output statement and add tracking
     for (const pattern of config.outputPatterns) {
       const match = pattern.test(cleanLine);
-      vscode.window.showInformationMessage(`Checking pattern: ${pattern}, Match: ${match}`);
       if (match) {
         const settings = vscode.workspace.getConfiguration('smartOutputTracker');
         const includeFileName = settings.get('includeFileName', true);
@@ -328,6 +328,38 @@ export function activate(context: vscode.ExtensionContext) {
   function hasExistingTracking(lineText: string, fileName: string): boolean {
     const trackingPattern = new RegExp(`${fileName}[:\\s]\\d+`);
     return trackingPattern.test(lineText);
+  }
+
+  async function handleFileRename(event: vscode.FileRenameEvent) {
+    for (const file of event.files) {
+      const oldFileName = path.basename(file.oldUri.fsPath);
+      const newFileName = path.basename(file.newUri.fsPath);
+
+      try {
+        const document = await vscode.workspace.openTextDocument(file.newUri);
+        const editor = await vscode.window.showTextDocument(document);
+
+        const config = languageConfigs[document.languageId];
+        if (!config) {
+          return;
+        }
+
+        await editor.edit(editBuilder => {
+          for (let i = 0; i < document.lineCount; i++) {
+            const line = document.lineAt(i);
+            const lineText = line.text;
+
+            //replace old file name with new file name in tracking info
+            if (hasExistingTracking(lineText, oldFileName)) {
+              const updatedLine = lineText.replace(new RegExp(`${oldFileName}[:\\s]\\d+`, 'g'), `${newFileName}:${i + 1}`);
+              editBuilder.replace(line.range, updatedLine);
+            }
+          }
+        });
+      } catch (error) {
+
+      }
+    }
   }
 }
 

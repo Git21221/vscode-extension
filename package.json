@@ -1,6 +1,6 @@
 {
   "name": "output-formatter",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Automatically add and update line numbers and file names to your output statements",
   "repository": "https://github.com/Git21221/vscode-extension",
   "publisher": "SaikatDas",
@@ -10,7 +10,6 @@
     "vscode": "^1.74.0"
   },
   "categories": [
-    "Other",
     "Debuggers",
     "Formatters"
   ],
