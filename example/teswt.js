@@ -1,3 +1,3 @@
 
 
-console.log('This is a test file in the example directory - test.js:3');
+console.log('This is a test file in the example directory - teswt.js:3');

@@ -148,6 +148,7 @@
       }
     }
   },
+  "icon": "bug-svgrepo-com_imresizer.jpg",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
