@@ -83,7 +83,6 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register commands
   const addTrackingCommand = vscode.commands.registerCommand('smartOutputTracker.addTracking', () => {
-    // vscode.window.showInformationMessage('Adding tracking to current output statement...');
     addLineTracking();
   });
 
@@ -138,6 +137,11 @@ export function activate(context: vscode.ExtensionContext) {
     const languageId = document.languageId;
     const config = languageConfigs[languageId];
 
+    if (isFileMarkedNoTrack(document)) {
+      vscode.window.showErrorMessage('This file is marked as "no track". No tracking will be applied.');
+      return;
+    }
+
     if (!config) {
       const issueUrl = `https://github.com/Git21221/vscode-extension/issues/new?title=Support%20request%20for%20language:%20${languageId}&body=Please%20add%20support%20for%20the%20language%20"${languageId}".%20Thanks!`;
 
@@ -191,6 +195,10 @@ export function activate(context: vscode.ExtensionContext) {
     const document = editor.document;
     const languageId = document.languageId;
     const config = languageConfigs[languageId];
+    if (isFileMarkedNoTrack(document)) {
+      vscode.window.showErrorMessage('This file is marked as "no track". No tracking will be applied.');
+      return;
+    }
 
     if (!config) {
       return;
@@ -199,11 +207,17 @@ export function activate(context: vscode.ExtensionContext) {
     const fileName = path.basename(document.fileName);
     let updatedLines = 0;
 
+    insideBlockComment = false; // Reset block comment state
     editor.edit(editBuilder => {
       for (let i = 0; i < document.lineCount; i++) {
         const line = document.lineAt(i);
         const lineText = line.text;
         const lineNumber = i + 1;
+
+        // Skip empty lines or lines that are just comments
+        if (!lineText.trim() || lineText.trim().startsWith(config.commentStyle) || shouldSkipLine(lineText)) {
+          continue;
+        }
 
         // Check if line contains output statement with existing tracking
         if (hasExistingTracking(lineText, fileName) ||
@@ -218,10 +232,6 @@ export function activate(context: vscode.ExtensionContext) {
         }
       }
     });
-
-    if (showMessage && updatedLines > 0) {
-      vscode.window.showInformationMessage(`Updated ${updatedLines} lines with current tracking info`);
-    }
   }
 
   function removeLineTracking() {
@@ -252,9 +262,6 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }).then(() => {
       isAutoUpdateEnabled = originalAutoUpdateEnabled; //restore auto-update setting
-      if (removedLines > 0) {
-        vscode.window.showInformationMessage(`Removed tracking from ${removedLines} lines`);
-      }
     })
 
   }
@@ -268,56 +275,67 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   function addTrackingToLine(lineText: string, fileName: string, lineNumber: number, config: LanguageConfig): string {
-    // Remove existing tracking first
     let cleanLine = hasExistingTracking(lineText, fileName)
       ? removeTrackingFromLine(lineText, fileName).trim()
       : lineText.trim();
 
-    // vscode.window.showInformationMessage(`Cleaned line: ${cleanLine}`);
-
-    // Find the output statement and add tracking
     for (const pattern of config.outputPatterns) {
-      const match = pattern.test(cleanLine);
-      if (match) {
-        const settings = vscode.workspace.getConfiguration('smartOutputTracker');
-        const includeFileName = settings.get('includeFileName', true);
-        const includeLineNumber = settings.get('includeLineNumber', true);
-        const separator = settings.get('separator', ' - ');
-        let trackingInfo = '';
-        if (includeFileName && includeLineNumber) {
-          trackingInfo = `${fileName}:${lineNumber}`;
-        } else if (includeFileName) {
-          trackingInfo = fileName;
-        } else if (includeLineNumber) {
-          trackingInfo = lineNumber.toString();
-        }
+      if (!pattern.test(cleanLine)) continue;
 
-        if (trackingInfo) {
-          // Find the first string parameter and append tracking info
-          const stringPattern = /(['"`])(.*?)\1/;
-          const stringMatch = stringPattern.exec(cleanLine);
-          vscode.window.showInformationMessage(`String match: ${stringMatch ? stringMatch[0] + stringMatch[1] + stringMatch[2] : 'none'}`);
+      const settings = vscode.workspace.getConfiguration('smartOutputTracker');
+      const includeFileName = settings.get('includeFileName', true);
+      const includeLineNumber = settings.get('includeLineNumber', true);
+      const separator = settings.get('separator', ' - ');
 
-          if (stringMatch) {
-            const quote = stringMatch[1];
-            const originalString = stringMatch[2];
+      let trackingInfo = '';
+      if (includeFileName && includeLineNumber) {
+        trackingInfo = `${fileName}:${lineNumber}`;
+      } else if (includeFileName) {
+        trackingInfo = fileName;
+      } else if (includeLineNumber) {
+        trackingInfo = lineNumber.toString();
+      }
+
+      if (trackingInfo) {
+        const stringPattern = /(['"`])((?:\\.|[^\\])*?)\1/;
+        const stringMatch = stringPattern.exec(cleanLine);
+
+        if (stringMatch) {
+          const quote = stringMatch[1];
+          const originalString = stringMatch[2];
+
+          if (/\w/.test(originalString)) {
             const newString = `${originalString}${separator}${trackingInfo}`;
             cleanLine = cleanLine.replace(stringPattern, `${quote}${newString}${quote}`);
           } else {
-            // If no string found, add as first parameter
-            const openParenIndex = cleanLine.indexOf('(');
-            if (openParenIndex !== -1) {
-              const beforeParen = cleanLine.substring(0, openParenIndex + 1);
-              const afterParen = cleanLine.substring(openParenIndex + 1);
-              cleanLine = `${beforeParen}"${trackingInfo}"${afterParen ? ', ' + afterParen : ')'}`;
-            }
+            return cleanLine;
           }
+
+        } else {
+          const openParenIndex = cleanLine.indexOf('(');
+          const closeParenIndex = cleanLine.lastIndexOf(')');
+
+          if (openParenIndex === -1 || closeParenIndex === -1 || closeParenIndex <= openParenIndex) {
+            return lineText;
+          }
+
+          const insideParens = cleanLine.slice(openParenIndex + 1, closeParenIndex).trim();
+          if (!insideParens) {
+            return lineText;
+          }
+
+          const beforeParen = cleanLine.substring(0, openParenIndex + 1);
+          const afterParen = cleanLine.substring(openParenIndex + 1);
+          cleanLine = `${beforeParen}"${trackingInfo}"${afterParen ? ', ' + afterParen : ')'}`;
         }
-        break;
       }
+
+      break;
     }
+
     return cleanLine;
   }
+
 
   function removeTrackingFromLine(lineText: string, fileName: string): string {
     // Remove patterns like "filename:123" or "filename 123" from strings
@@ -361,6 +379,93 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   }
+
+  let insideBlockComment = false;
+
+  function shouldSkipLine(lineText: string): boolean {
+    const text = lineText.trim();
+
+    // Skip empty lines
+    if (!text) return true;
+
+    // Skip full one-liner block comments
+    if (
+      (text.startsWith('/*') && text.endsWith('*/')) ||
+      (text.startsWith("'''") && text.endsWith("'''")) ||
+      (text.startsWith('"""') && text.endsWith('"""')) ||
+      (text.startsWith('<!--') && text.endsWith('-->'))
+    ) {
+      return true;
+    }
+
+    // Start of block comment
+    if (
+      text.startsWith('/*') ||
+      text.startsWith("'''") ||
+      text.startsWith('"""') ||
+      text.startsWith('<!--')
+    ) {
+      insideBlockComment = true;
+      return true;
+    }
+
+    // End of block comment
+    if (
+      insideBlockComment &&
+      (text.endsWith('*/') || text.endsWith("'''") || text.endsWith('"""') || text.endsWith('-->'))
+    ) {
+      insideBlockComment = false;
+      return true;
+    }
+
+    // Skip if currently inside block comment
+    if (insideBlockComment) {
+      return true;
+    }
+
+    // 6. Single-line comment
+    if (
+      text.startsWith('//') ||
+      text.startsWith('#') ||
+      text.startsWith('--') || // SQL-style
+      text.startsWith(';')     // Lisp, config, etc.
+    ) {
+      return true;
+    }
+
+    // 7. "no-track" comment anywhere
+    const noTrackRegex = /(\/\/|#|\/\*|<!--)\s*no\s*[- ]\s*track/i;
+    if (noTrackRegex.test(text)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function isFileMarkedNoTrack(document: vscode.TextDocument): boolean {
+    const maxLinesToCheck = 10;
+
+    for (let i = 0; i < Math.min(document.lineCount, maxLinesToCheck); i++) {
+      const lineText = document.lineAt(i).text.trim();
+      if (!lineText) continue;
+
+      const isCommentLine = lineText.startsWith('//') ||
+        lineText.startsWith('#') ||
+        lineText.startsWith('/*') ||
+        lineText.startsWith('<!--');
+
+      if (isCommentLine && /no\s*[- ]\s*track/i.test(lineText)) {
+        return true;
+      }
+
+      if (!isCommentLine) {
+        break;
+      }
+    }
+
+    return false;
+  }
+
 }
 
 export function deactivate() { }

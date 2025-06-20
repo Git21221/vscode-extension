@@ -4,17 +4,21 @@ A premium VSCode extension that automatically adds and maintains line numbers an
 
 ## Features
 
-### 🎯 Automatic Line Tracking
+### Automatic Line Tracking
 - Automatically adds file name and line number to your output statements
 - Example: `console.log("hello")` becomes `console.log("hello - test.js:89")`
 - Supports JavaScript, TypeScript, Python, Java, C#, PHP, Go, and Rust
 
-### 🔄 Auto-Update
+### Auto-Update
 - Automatically updates line numbers when your code changes
 - Real-time tracking keeps your debug info accurate
 - Toggle auto-update on/off as needed
 
-### 🌍 Multi-Language Support
+### ignore tracking
+- use `// no tracking` to ignore specific lines from tracking
+- use `// no tracking` on top of the file to ignore any tracking in the file
+
+### Multi-Language Support
 - **JavaScript/TypeScript**: `console.log`, `console.error`, `process.stdout.write`
 - **Python**: `print`, `logging` methods
 - **Java**: `System.out.print/println`, `System.err.print/println`
@@ -23,7 +27,7 @@ A premium VSCode extension that automatically adds and maintains line numbers an
 - **Go**: `fmt.Print/Println/Printf`, `log.Print/Println/Printf`
 - **Rust**: `println!`, `print!`, `dbg!`
 
-### ⚙️ Customizable Settings
+### Customizable Settings
 - Configure whether to include file names and/or line numbers
 - Customize the separator between original message and tracking info
 - Enable/disable auto-update functionality
