@@ -1,6 +1,6 @@
 {
   "name": "output-formatter",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Automatically add and update line numbers and file names to your output statements",
   "repository": "https://github.com/Git21221/vscode-extension",
   "publisher": "SaikatDas",
@@ -86,6 +86,10 @@
         "command": "smartOutputTracker.toggleAutoUpdate",
         "title": "Toggle Auto-Update",
         "category": "Smart Output"
+      },
+      {
+        "command": "smartOutputTracker.toggleTrackingMenu",
+        "title": "Toggle Tracking Menu"
       }
     ],
     "keybindings": [
@@ -108,11 +112,6 @@
           "command": "smartOutputTracker.addTracking",
           "when": "editorTextFocus",
           "group": "smartOutput@1"
-        },
-        {
-          "command": "smartOutputTracker.updateAllTracking",
-          "when": "editorTextFocus",
-          "group": "smartOutput@2"
         },
         {
           "command": "smartOutputTracker.removeTracking",
@@ -147,7 +146,7 @@
       }
     }
   },
-  "icon": "bug-svgrepo-com_imresizer.jpg",
+  "icon": "debug-console-FACB55-128.png",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
