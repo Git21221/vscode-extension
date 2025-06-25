@@ -2,9 +2,8 @@
 
 A premium VSCode extension that automatically adds and maintains line numbers and file names in your output statements across multiple programming languages.
 
-<!-- > [Demo Video](./test.mp4) -->
-<video src="./test.mp4" controls width="100%"></video>
-
+## 🎬 Demo
+[![Watch the demo on YouTube](https://img.shields.io/badge/Watch-Demo-red?logo=youtube)](https://www.youtube.com/watch?v=ycdQzFMT8F0)
 ---
 
 ## Features
