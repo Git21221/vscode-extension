@@ -3,7 +3,7 @@
 A premium VSCode extension that automatically adds and maintains line numbers and file names in your output statements across multiple programming languages.
 
 ## 🎬 Demo
-[![Watch the demo on YouTube](https://img.shields.io/badge/Watch-Demo-red?logo=youtube)](test.webm)
+<video src="./test.webm" autoplay loop muted playsinline></video>
 ---
 
 ## Features
