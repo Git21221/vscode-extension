@@ -2,27 +2,23 @@
 
 A premium VSCode extension that automatically adds and maintains line numbers and file names in your output statements across multiple programming languages.
 
-## 🎬 Demo
-<video src="./test.webm" autoplay loop muted playsinline></video>
----
-
 ## Features
 
-### 🔢 Automatic Line Tracking
+### Automatic Line Tracking
 - Automatically adds file name and line number to your output statements
 - Example: `console.log("hello")` becomes `console.log("hello - test.js:89")`
 - Supports JavaScript, TypeScript, Python, Java, C#, PHP, Go, and Rust
 
-### 🔁 Auto-Update
+### Auto-Update
 - Automatically updates line numbers when your code changes
 - Real-time tracking keeps your debug info accurate
 - Toggle auto-update on/off via **status bar**
 
-### 🚫 Ignore Tracking
+### Ignore Tracking
 - Add `// no tracking` to specific lines to skip tracking
 - Add `// no tracking` at the top of a file to skip tracking for the entire file
 
-### 🌐 Multi-Language Support
+### Multi-Language Support
 - **JavaScript/TypeScript**: `console.log`, `console.error`, `process.stdout.write`
 - **Python**: `print`, `logging` methods
 - **Java**: `System.out.print/println`, `System.err.print/println`
@@ -31,14 +27,14 @@ A premium VSCode extension that automatically adds and maintains line numbers an
 - **Go**: `fmt.Print/Println/Printf`, `log.Print/Println/Printf`
 - **Rust**: `println!`, `print!`, `dbg!`
 
-### ⚙️ Customizable Settings
+### Customizable Settings
 - Configure whether to include file names and/or line numbers
 - Customize the separator between the original message and tracking info
 - Enable/disable auto-update functionality
 
 ---
 
-## 🖱 Status Bar Integration
+## Status Bar Integration
 
 A custom logo is now shown in the status bar. Clicking it opens a quick menu with:
 
@@ -49,7 +45,7 @@ This makes it easier to manage your debug tracking from anywhere in your project
 
 ---
 
-## 🧩 Commands
+## Commands
 
 | Command | Description |
 |--------|-------------|
@@ -60,7 +56,7 @@ This makes it easier to manage your debug tracking from anywhere in your project
 
 ---
 
-## 🚀 Installation
+## Installation
 
 1. Install from VSCode Marketplace: [Smart Output Tracker Pro](https://marketplace.visualstudio.com/items?itemName=SaikatDas.output-formatter)
 2. Restart VSCode
@@ -68,24 +64,24 @@ This makes it easier to manage your debug tracking from anywhere in your project
 
 ---
 
-## 💡 Usage
+## Usage
 
-### 🔹 Basic Usage
+### Basic Usage
 1. Place cursor on any output statement (`console.log`, `print`, etc.)
 2. Right-click and select "Add Line Tracking to Output"
 3. Tracking info is added automatically with file and line number
 
-### 🔄 Auto-Update
+### Auto-Update
 - Line numbers are kept up-to-date in real time
 - You can toggle this feature from the **status bar**
 
-### 🔃 Bulk Operations
+### Bulk Operations
 - Use "Update All Line Tracking" to refresh all debug lines
 - Use "Remove Line Tracking" to clean up tracking data
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
 You can configure Smart Output Tracker Pro in your VSCode settings:
 
