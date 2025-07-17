@@ -1,6 +1,13 @@
 public class HelloJava {
   public static void main(String[] args) {
-System.out.println("Hello from Java - java.example.java:3");
-System.err.println("Java error output - java.example.java:4");
+
+    System.out.println("a - java.example.java:4");
   }
 }
+ wda dwadwa dwwd  dawdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa dwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  wda dwadwa dwwd  dawdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa dwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    wda dwadwa dwwd  dawdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa dwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        wda dwadwa dwwd  dawdwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa dwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        dwa
+
+        
